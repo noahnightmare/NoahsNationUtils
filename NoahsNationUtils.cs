@@ -50,6 +50,7 @@ namespace NoahsNationUtils
             Scp096.AddingTarget += _handlers.OnAddingTarget;
             Player.Dying += _handlers.OnPlayerDying;
             Player.IntercomSpeaking += _handlers.OnIntercomSpeaking;
+            Player.Spawned += _handlers.OnSpawned;
         }
 
         private void UnregisterEvents()
@@ -57,6 +58,7 @@ namespace NoahsNationUtils
             Scp096.AddingTarget -= _handlers.OnAddingTarget;
             Player.Dying -= _handlers.OnPlayerDying;
             Player.IntercomSpeaking -= _handlers.OnIntercomSpeaking;
+            Player.Spawned -= _handlers.OnSpawned;
 
             _handlers = null;
         }

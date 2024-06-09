@@ -103,5 +103,12 @@ namespace NoahsNationUtils
                 Log.Info("Failed to set override flags. User or intercom is null.");
             }
         }
+
+        public void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (ev.Player.Role != RoleTypeId.Scp079) return;
+
+            ev.Player.Broadcast(10, "Use the .ictext command in your client console to change the text that appears on the intercom!");
+        }
     }
 }
