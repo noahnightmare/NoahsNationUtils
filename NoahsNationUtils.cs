@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Player = Exiled.Events.Handlers.Player;
 using Scp096 = Exiled.Events.Handlers.Scp096;
+using Server = Exiled.Events.Handlers.Server;
 using PlayerRoles.Spectating;
 using System;
 using Exiled.Events.Handlers;
@@ -23,6 +24,8 @@ namespace NoahsNationUtils
         private Harmony _harmony;
 
         private string HarmonyId { get; } = "punish.dev";
+
+        public static List<string> SpectatorListHidden { get; } = new();
 
         public override void OnEnabled()
         {
@@ -51,6 +54,7 @@ namespace NoahsNationUtils
             Player.Dying += _handlers.OnPlayerDying;
             Player.IntercomSpeaking += _handlers.OnIntercomSpeaking;
             Player.Spawned += _handlers.OnSpawned;
+            Server.RoundStarted += _handlers.OnRoundStarted;
         }
 
         private void UnregisterEvents()
@@ -59,6 +63,7 @@ namespace NoahsNationUtils
             Player.Dying -= _handlers.OnPlayerDying;
             Player.IntercomSpeaking -= _handlers.OnIntercomSpeaking;
             Player.Spawned -= _handlers.OnSpawned;
+            Server.RoundStarted -= _handlers.OnRoundStarted;
 
             _handlers = null;
         }

@@ -20,5 +20,13 @@ namespace NoahsNationUtils
 
         [Description("Micro Vaporize Configs")]
         public bool EnableMicroVaporizing {  get; set; } = true;
+
+        [Description("Spectator List Configs")]
+        public float RefreshRate { get; set; } = 2;
+
+        public string FullText { get; set; } = "<size=23><align=right>%display%</size><voffset=900> </voffset></align>";
+        public string PlayerDisplay { get; set; } = "%name%";
+        public string NoSpectators { get; set; } = "👥 Spectators (0)";
+        public string Spectators { get; set; } = "👥 Spectators (%amount%)";
     }
 }

@@ -1,13 +1,16 @@
 ﻿using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Scp096;
 using Exiled.Events.EventArgs.Scp3114;
+using Exiled.Events.EventArgs.Server;
 using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 using Intercom = PlayerRoles.Voice.Intercom;
@@ -109,6 +112,39 @@ namespace NoahsNationUtils
             if (ev.Player.Role != RoleTypeId.Scp079) return;
 
             ev.Player.Broadcast(10, "Use the .ictext command in your client console to change the text that appears on the intercom!");
+        }
+
+        public string CoroutineTag = "Spectator List";
+
+        public void OnRoundStarted() => Timing.RunCoroutine(SpectatorList().CancelWith(Server.Host.GameObject), CoroutineTag);
+        public void OnRoundEnded(RoundEndedEventArgs ev) => Timing.KillCoroutines(CoroutineTag);
+
+        public IEnumerator<float> SpectatorList()
+        {
+            for (; ; )
+            {
+                foreach(Player player in Player.List)
+                {
+                    if (player.IsDead || NoahsNationUtils.SpectatorListHidden.Contains(player.UserId)) continue; // people hidden dont have it appear
+
+                    int spectatorCount = player.CurrentSpectatingPlayers.Count(p => p.Role != RoleTypeId.Overwatch); // ignore overwatch players
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append($"<color={player.Role.Color.ToHex()}>");
+                    sb.AppendLine(spectatorCount == 0
+                        ? NoahsNationUtils.Instance.Config.NoSpectators
+                        : NoahsNationUtils.Instance.Config.Spectators.Replace("%amount%", spectatorCount.ToString()));
+
+                    foreach (Player spectator in player.CurrentSpectatingPlayers.Where(p => p.Role != RoleTypeId.Overwatch))
+                    {
+                        sb.AppendLine(NoahsNationUtils.Instance.Config.PlayerDisplay.Replace("%name%", spectator.CustomName));
+                    }
+                    sb.Append($"</color>");
+
+                    player.ShowHint(NoahsNationUtils.Instance.Config.FullText.Replace($"%display%", sb.ToString()), NoahsNationUtils.Instance.Config.RefreshRate + 0.15f);
+                }
+                yield return Timing.WaitForSeconds(NoahsNationUtils.Instance.Config.RefreshRate);
+            }
         }
     }
 }
