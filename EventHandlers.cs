@@ -125,7 +125,7 @@ namespace NoahsNationUtils
             {
                 foreach(Player player in Player.List)
                 {
-                    if (player.IsDead || NoahsNationUtils.SpectatorListHidden.Contains(player.UserId)) continue; // people hidden dont have it appear
+                    if (player.IsDead || player.IsScp || NoahsNationUtils.SpectatorListHidden.Contains(player.UserId)) continue; // people hidden dont have it appear
 
                     int spectatorCount = player.CurrentSpectatingPlayers.Count(p => p.Role != RoleTypeId.Overwatch); // ignore overwatch players
 
