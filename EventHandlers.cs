@@ -127,7 +127,7 @@ namespace NoahsNationUtils
                 {
                     if (player.IsDead || player.IsScp || NoahsNationUtils.SpectatorListHidden.Contains(player.UserId)) continue; // people hidden dont have it appear
 
-                    int spectatorCount = player.CurrentSpectatingPlayers.Count(p => p.Role != RoleTypeId.Overwatch); // ignore overwatch players
+                    int spectatorCount = player.CurrentSpectatingPlayers.Count(p => !p.IsOverwatchEnabled); // ignore overwatch players
 
                     StringBuilder sb = new StringBuilder();
                     sb.Append($"<color={player.Role.Color.ToHex()}>");
@@ -135,7 +135,7 @@ namespace NoahsNationUtils
                         ? NoahsNationUtils.Instance.Config.NoSpectators
                         : NoahsNationUtils.Instance.Config.Spectators.Replace("%amount%", spectatorCount.ToString()));
 
-                    foreach (Player spectator in player.CurrentSpectatingPlayers.Where(p => p.Role != RoleTypeId.Overwatch))
+                    foreach (Player spectator in player.CurrentSpectatingPlayers.Where(p => !p.IsOverwatchEnabled))
                     {
                         sb.AppendLine(NoahsNationUtils.Instance.Config.PlayerDisplay.Replace("%name%", spectator.CustomName));
                     }
