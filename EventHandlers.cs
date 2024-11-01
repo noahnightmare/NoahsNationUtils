@@ -116,7 +116,14 @@ namespace NoahsNationUtils
 
         public string CoroutineTag = "Spectator List";
 
-        public void OnRoundStarted() => Timing.RunCoroutine(SpectatorList().CancelWith(Server.Host.GameObject), CoroutineTag);
+        public void OnRoundStarted() 
+        {
+            if (!AutoEvents.AutoEvents.isEventRunning)
+            {
+                Timing.RunCoroutine(SpectatorList().CancelWith(Server.Host.GameObject), CoroutineTag);
+            }
+        }
+
         public void OnRoundEnded(RoundEndedEventArgs ev) => Timing.KillCoroutines(CoroutineTag);
 
         public IEnumerator<float> SpectatorList()
